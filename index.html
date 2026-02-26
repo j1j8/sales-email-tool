@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Email Gen</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; padding: 20px; background: #f4f4f9; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 400px; margin: auto; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .result { padding: 8px; border-bottom: 1px solid #eee; cursor: pointer; color: #007aff; }
+        .result:hover { background: #f0f7ff; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h3>Sales Email Generator</h3>
+        <input type="text" id="firstName" placeholder="First Name">
+        <input type="text" id="lastName" placeholder="Last Name">
+        <input type="text" id="domain" placeholder="company.com">
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const inputs = ['firstName', 'lastName', 'domain'];
+        inputs.forEach(id => document.getElementById(id).addEventListener('input', updateEmails));
+
+        function updateEmails() {
+            const f = document.getElementById('firstName').value.toLowerCase().replace(/\s/g, '');
+            const l = document.getElementById('lastName').value.toLowerCase().replace(/\s/g, '');
+            const d = document.getElementById('domain').value.toLowerCase().replace(/https?:\/\//, '').replace('www.', '');
+            const res = document.getElementById('results');
+            
+            if (!f || !l || !d) { res.innerHTML = ''; return; }
+            
+            const patterns = [`${f}.${l}@${d}`, `${f}@${d}`, `${f}${l}@${d}`, `${f.charAt(0)}${l}@${d}`];
+            res.innerHTML = patterns.map(p => `<div class="result" onclick="copy('${p}')">${p}</div>`).join('');
+        }
+
+        function copy(text) {
+            navigator.clipboard.writeText(text);
+            alert('Copied: ' + text);
+        }
+    </script>
+</body>
+</html>
